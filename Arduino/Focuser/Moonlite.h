@@ -26,7 +26,9 @@ along with Moonlite library.  If not, see <http://www.gnu.org/licenses/>.
 #define Moonlite_h
 
 #if ARDUINO < 100
+
 #include <Wprogram.h>
+
 #else
 #include <Arduino.h>
 #endif
@@ -58,44 +60,49 @@ along with Moonlite library.  If not, see <http://www.gnu.org/licenses/>.
 #define ML_INPUT_BUFFER_SIZE 8 // Buffer size for the incomming command.
 #define ML_OUTPUT_BUFFER_SIZE 5 // Buffer size for the answer message.
 
-typedef struct MoonliteCommand_s
- {
-   int commandID;
-   long parameter;
+typedef struct MoonliteCommand_s {
+    int commandID;
+    long parameter;
 } MoonliteCommand_t;
 
-class Moonlite
-{
- public:
-  // Constructors:
-  Moonlite();
+class Moonlite {
+public:
+    // Constructors:
+    Moonlite();
 
-  // Getters:
-  MoonliteCommand_t getCommand();
+    // Getters:
+    MoonliteCommand_t getCommand();
 
-  // Setters:
-  void setAnswer(int nbChar, long answer);
+    // Setters:
+    void setAnswer(int nbChar, long answer);
 
-  // Other public members
-  void init(int baudRate);
-  int isNewCommandAvailable();
-  int Manage();
+    // Other public members
+    void init(int baudRate);
 
- private:
-  MoonliteCommand_t currentCommand;
-  int newCommandIsAvailable;
-  char currentAsciiCommand[ML_INPUT_BUFFER_SIZE];
-  char AsciiAnswer[ML_OUTPUT_BUFFER_SIZE];
-  int currentAsciiIndex;
-  void decodeCommand();
-  static const int HexTable[16];
+    int isNewCommandAvailable();
 
-  void readNewAscii();
-  long convert4CharToLong(char c1, char c2, char c3, char c4);
-  long convert2CharToLong(char c1, char c2);
-  long convert2CharToSignedLong(char c1, char c2);
+    int Manage();
 
-  void convertLongToChar(long value, int nbChar, char *buffer);
+private:
+    MoonliteCommand_t currentCommand;
+    int newCommandIsAvailable;
+    char currentAsciiCommand[ML_INPUT_BUFFER_SIZE];
+    char AsciiAnswer[ML_OUTPUT_BUFFER_SIZE];
+    int currentAsciiIndex;
+
+    void decodeCommand();
+
+    static const int HexTable[16];
+
+    void readNewAscii();
+
+    long convert4CharToLong(char c1, char c2, char c3, char c4);
+
+    long convert2CharToLong(char c1, char c2);
+
+    long convert2CharToSignedLong(char c1, char c2);
+
+    void convertLongToChar(long value, int nbChar, char *buffer);
 };
 
 #endif //Moonlite_h
